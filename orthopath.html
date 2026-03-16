@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Logos AI · Complete Bible Study Suite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* Modern color palette */
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #f1f5f9;
+      --surface: #ffffff;
+      --surface-hover: #f8fafc;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-tertiary: #64748b;
+      --accent: #3b82f6;
+      --accent-soft: #dbeafe;
+      --accent-light: #eff6ff;
+      --accent-dark: #1d4ed8;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --purple: #8b5cf6;
+      --pink: #ec4899;
+      --teal: #14b8a6;
+      --amber: #fbbf24;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      --radius-sm: 0.375rem;
+      --radius: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+    }
+
+    .dark {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-tertiary: #334155;
+      --surface: #1e293b;
+      --surface-hover: #334155;
+      --border: #334155;
+      --border-strong: #475569;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --text-tertiary: #94a3b8;
+      --accent: #60a5fa;
+      --accent-soft: #1e3a8a;
+      --accent-light: #1e293b;
+      --accent-dark: #3b82f6;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.5;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    #app {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    #sidebar {
+      width: 280px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      transition: width 0.3s;
+      overflow-y: auto;
+    }
+
+    #sidebar.collapsed {
+      width: 80px;
+    }
+
+    .sidebar-header {
+      padding: 1.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 1rem 0.5rem;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 0.25rem;
+    }
+
+    .nav-item:hover {
+      background: var(--surface-hover);
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .nav-item i {
+      width: 1.5rem;
+      font-size: 1.1rem;
+    }
+
+    .nav-item span {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    #sidebar.collapsed .nav-item span {
+      display: none;
+    }
+
+    #sidebar.collapsed .sidebar-header span {
+      display: none;
+    }
+
+    /* Main Content */
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--bg-primary);
+    }
+
+    /* Top Bar */
+    #topbar {
+      padding: 0.75rem 1.5rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-btn {
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .book-selector {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .book-selector select {
+      padding: 0.5rem 2rem 0.5rem 0.75rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.5rem center;
+    }
+
+    .search-bar {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 0.25rem 0.25rem 0.25rem 1rem;
+    }
+
+    .search-bar i {
+      color: var(--text-tertiary);
+    }
+
+    .search-bar input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 0.5rem 0;
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    .search-bar button {
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      border: none;
+      background: var(--accent);
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .search-bar button:hover {
+      background: var(--accent-dark);
+    }
+
+    /* Content Area */
+    #content-area {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* Reader Panel */
+    #reader-panel {
+      flex: 1;
+      overflow-y: auto;
+      padding: 2rem;
+    }
+
+    .reader-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .reader-header h1 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .reader-header h2 {
+      font-size: 1.5rem;
+      color: var(--text-tertiary);
+      font-weight: 400;
+    }
+
+    .verses-container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .verse-item {
+      display: flex;
+      gap: 1rem;
+      padding: 0.5rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 0.25rem;
+      user-select: none;
+    }
+
+    .verse-item:hover {
+      background: var(--surface-hover);
+    }
+
+    .verse-item.selected {
+      background: var(--accent-soft);
+    }
+
+    .verse-number {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent);
+      min-width: 2rem;
+      text-align: right;
+    }
+
+    .verse-text {
+      flex: 1;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .verse-text.red-letter {
+      color: var(--danger);
+    }
+
+    /* Selection toolbar */
+    #selection-toolbar {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 0.75rem 1.5rem;
+      display: none;
+      gap: 1rem;
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+    }
+
+    .selection-toolbar.show {
+      display: flex;
+    }
+
+    .toolbar-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      border: none;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .toolbar-btn:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* Side Panel */
+    #side-panel {
+      width: 400px;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s;
+    }
+
+    #side-panel.hidden {
+      transform: translateX(100%);
+      position: fixed;
+      right: 0;
+      top: 0;
+      bottom: 0;
+    }
+
+    .panel-header {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .panel-header h3 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .panel-tabs {
+      display: flex;
+      gap: 0.5rem;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-tab {
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      border: none;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .panel-tab.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    .panel-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--surface);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text-tertiary);
+      cursor: pointer;
+    }
+
+    /* Image Creator */
+    .image-preview {
+      width: 100%;
+      height: 300px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      margin: 1rem 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .image-preview canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .prompt-input {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    /* Maps */
+    .map-container {
+      height: 400px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map-svg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding: 2rem 0;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      border-radius: var(--radius);
+      background: var(--bg-secondary);
+    }
+
+    .timeline-date {
+      min-width: 100px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      #sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 100;
+        transform: translateX(-100%);
+      }
+
+      #sidebar.show {
+        transform: translateX(0);
+      }
+
+      #side-panel {
+        position: fixed;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 100;
+        width: 100%;
+      }
+
+      #topbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+
+    /* Offline indicator */
+    .offline-badge {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: var(--warning);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      display: none;
+      z-index: 3000;
+    }
+
+    .offline-badge.show {
+      display: block;
+    }
+
+    /* Loading spinner */
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- Sidebar -->
+    <div id="sidebar">
+      <div class="sidebar-header">
+        <i class="fas fa-bible logo"></i>
+        <span class="logo">Logos AI</span>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-item active" onclick="setActiveNav(this, 'reader')">
+          <i class="fas fa-book-open"></i>
+          <span>Bible Reader</span>
+        </div>
+        <div class="nav-item" onclick="setActiveNav(this, 'ai-teacher')">
+          <i class="fas fa-robot"></i>
+          <span>AI Teacher</span>
+        </div>
+        <div class="nav-item" onclick="setActiveNav(this, 'sermon')">
+          <i class="fas fa-church"></i>
+          <span>Sermon Generator</span>
+        </div>
+        <div class="nav-item" onclick="setActiveNav(this, 'devotion')">
+          <i class="fas fa-heart"></i>
+          <span>Daily Devotion</span>
+        </div>
+        <div class="nav-item" onclick="setActiveNav(this, 'image-creator')">
+          <i class="fas fa-image"></i>
+          <span>Verse Images</span>
+        </div>
+        <div class="nav-item" onclick="setActiveNav(this, 'maps')">
+          <i class="fas fa-map"></i>
+          <span>Biblical Maps</span>
+        </div>
+        <div class="nav-item" onclick="setActiveNav(this, 'timeline')">
+          <i class="fas fa-clock"></i>
+          <span>Timeline</span>
+        </div>
+        <div class="nav-item" onclick="setActiveNav(this, 'study')">
+          <i class="fas fa-language"></i>
+          <span>Greek/Hebrew Study</span>
+        </div>
+        <div class="nav-item" onclick="setActiveNav(this, 'settings')">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main">
+      <!-- Top Bar -->
+      <div id="topbar">
+        <button class="nav-btn" onclick="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </button>
+        
+        <div class="book-selector">
+          <select id="book-select" onchange="changeBook()">
+            <!-- Populated by JS -->
+          </select>
+          <select id="chapter-select" onchange="loadChapter()">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+
+        <div class="nav-controls">
+          <button class="nav-btn" onclick="prevChapter()">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="nav-btn" onclick="nextChapter()">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" id="search-input" placeholder="Search Bible or ask AI..." onkeypress="handleSearchKey(event)">
+          <button onclick="performSearch()">Search</button>
+        </div>
+
+        <button class="nav-btn" onclick="toggleTheme()">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+
+      <!-- Content Area -->
+      <div id="content-area">
+        <!-- Reader Panel -->
+        <div id="reader-panel">
+          <div class="reader-header">
+            <h1 id="book-title">John</h1>
+            <h2 id="chapter-title">Chapter 3</h2>
+          </div>
+          <div class="verses-container" id="verses-container">
+            <!-- Verses loaded here -->
+          </div>
+        </div>
+
+        <!-- Side Panel -->
+        <div id="side-panel">
+          <div class="panel-header">
+            <h3 id="panel-title">Study Tools</h3>
+            <button class="close-btn" onclick="toggleSidePanel()">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="panel-tabs">
+            <button class="panel-tab active" onclick="switchPanelTab('commentary')">Commentary</button>
+            <button class="panel-tab" onclick="switchPanelTab('crossref')">Cross-Ref</button>
+            <button class="panel-tab" onclick="switchPanelTab('study')">Word Study</button>
+            <button class="panel-tab" onclick="switchPanelTab('notes')">Notes</button>
+          </div>
+          <div class="panel-content" id="panel-content">
+            <!-- Panel content loaded here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selection Toolbar -->
+  <div id="selection-toolbar">
+    <button class="toolbar-btn" onclick="copySelectedVerses()">
+      <i class="fas fa-copy"></i> Copy
+    </button>
+    <button class="toolbar-btn" onclick="shareSelectedVerses()">
+      <i class="fas fa-share-alt"></i> Share
+    </button>
+    <button class="toolbar-btn" onclick="openImageCreator()">
+      <i class="fas fa-image"></i> Create Image
+    </button>
+    <button class="toolbar-btn" onclick="getCommentaryForSelected()">
+      <i class="fas fa-comment"></i> Commentary
+    </button>
+    <button class="toolbar-btn" onclick="clearSelection()">
+      <i class="fas fa-times"></i> Clear
+    </button>
+  </div>
+
+  <!-- Modals -->
+  <div id="ai-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>AI Bible Teacher</h3>
+        <button class="close-btn" onclick="closeModal('ai')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="ai-content">
+        <textarea id="ai-question" class="prompt-input" rows="3" placeholder="Ask any Bible question..."></textarea>
+        <button class="nav-btn" style="width:100%;" onclick="askAI()">Ask AI Teacher</button>
+        <div id="ai-response" style="margin-top:1rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="image-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Create Verse Image</h3>
+        <button class="close-btn" onclick="closeModal('image')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="image-content">
+        <div class="image-preview" id="image-preview">
+          <canvas id="verse-canvas" width="800" height="400"></canvas>
+        </div>
+        <input type="text" id="image-prompt" class="prompt-input" placeholder="Describe background (e.g., 'sunset over mountains')">
+        <button class="nav-btn" style="width:100%;" onclick="generateVerseImage()">Generate Image</button>
+        <button class="nav-btn" style="width:100%; margin-top:0.5rem;" onclick="downloadImage()">Download</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="sermon-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>AI Sermon Generator</h3>
+        <button class="close-btn" onclick="closeModal('sermon')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div>
+        <input type="text" id="sermon-topic" class="prompt-input" placeholder="Sermon topic or passage">
+        <select id="sermon-style" class="prompt-input">
+          <option value="expository">Expository</option>
+          <option value="topical">Topical</option>
+          <option value="narrative">Narrative</option>
+          <option value="devotional">Devotional</option>
+        </select>
+        <button class="nav-btn" style="width:100%;" onclick="generateSermon()">Generate Sermon</button>
+        <div id="sermon-output" style="margin-top:1rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="devotion-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Daily Devotion Generator</h3>
+        <button class="close-btn" onclick="closeModal('devotion')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div>
+        <input type="text" id="devotion-theme" class="prompt-input" placeholder="Theme (e.g., 'hope', 'faith', 'love')">
+        <button class="nav-btn" style="width:100%;" onclick="generateDevotion()">Generate Devotion</button>
+        <div id="devotion-output" style="margin-top:1rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="maps-modal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+      <div class="modal-header">
+        <h3>Biblical Maps</h3>
+        <button class="close-btn" onclick="closeModal('maps')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="map-container">
+        <svg class="map-svg" viewBox="0 0 800 400">
+          <!-- Simple map of ancient Israel -->
+          <rect width="800" height="400" fill="#e5e7eb"/>
+          <path d="M200,100 L300,80 L400,120 L450,180 L400,240 L300,260 L200,220 L150,160 Z" fill="#fef3c7" stroke="#92400e" stroke-width="2"/>
+          <circle cx="250" cy="150" r="5" fill="#1e40af"/>
+          <text x="260" y="145" fill="#1e3a8a" font-size="12">Jerusalem</circle>
+          <circle cx="350" cy="180" r="5" fill="#1e40af"/>
+          <text x="360" y="175" fill="#1e3a8a" font-size="12">Bethlehem</text>
+          <circle cx="400" cy="120" r="5" fill="#1e40af"/>
+          <text x="410" y="115" fill="#1e3a8a" font-size="12">Jericho</text>
+          <path d="M200,100 Q300,50 400,80" stroke="#059669" stroke-width="2" fill="none"/>
+          <text x="300" y="60" fill="#059669" font-size="12">Jordan River</text>
+          <rect x="100" y="250" width="200" height="80" fill="#86efac" stroke="#166534"/>
+          <text x="150" y="300" fill="#166534" font-size="12">Dead Sea</text>
+        </svg>
+      </div>
+      <div style="margin-top:1rem;">
+        <select id="map-select" class="prompt-input" onchange="changeMap()">
+          <option value="israel">Ancient Israel</option>
+          <option value="paul">Paul's Journeys</option>
+          <option value="exodus">Exodus Route</option>
+          <option value="jerusalem">Jerusalem</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div id="timeline-modal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+      <div class="modal-header">
+        <h3>Biblical Timeline</h3>
+        <button class="close-btn" onclick="closeModal('timeline')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">~2000 BC</div>
+          <div>Abraham called by God</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">~1446 BC</div>
+          <div>Exodus from Egypt</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">~1010 BC</div>
+          <div>David becomes king</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">~586 BC</div>
+          <div>Fall of Jerusalem</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">~538 BC</div>
+          <div>Return from exile</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">~4 BC</div>
+          <div>Birth of Jesus</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">~30 AD</div>
+          <div>Crucifixion & Resurrection</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">~70 AD</div>
+          <div>Destruction of Jerusalem</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Offline badge -->
+  <div class="offline-badge" id="offline-badge">
+    <i class="fas fa-wifi-slash"></i> Offline Mode
+  </div>
+
+  <script>
+    // ==================== DATA ====================
+    const BOOKS = {
+      OT: ['Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth','1 Samuel','2 Samuel','1 Kings','2 Kings','1 Chronicles','2 Chronicles','Ezra','Nehemiah','Esther','Job','Psalms','Proverbs','Ecclesiastes','Song of Solomon','Isaiah','Jeremiah','Lamentations','Ezekiel','Daniel','Hosea','Joel','Amos','Obadiah','Jonah','Micah','Nahum','Habakkuk','Zephaniah','Haggai','Zechariah','Malachi'],
+      NT: ['Matthew','Mark','Luke','John','Acts','Romans','1 Corinthians','2 Corinthians','Galatians','Ephesians','Philippians','Colossians','1 Thessalonians','2 Thessalonians','1 Timothy','2 Timothy','Titus','Philemon','Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation']
+    };
+
+    const CHAPTER_COUNTS = {
+      'Genesis':50,'Exodus':40,'Leviticus':27,'Numbers':36,'Deuteronomy':34,'Joshua':24,'Judges':21,'Ruth':4,'1 Samuel':31,'2 Samuel':24,'1 Kings':22,'2 Kings':25,'1 Chronicles':29,'2 Chronicles':36,'Ezra':10,'Nehemiah':13,'Esther':10,'Job':42,'Psalms':150,'Proverbs':31,'Ecclesiastes':12,'Song of Solomon':8,'Isaiah':66,'Jeremiah':52,'Lamentations':5,'Ezekiel':48,'Daniel':12,'Hosea':14,'Joel':3,'Amos':9,'Obadiah':1,'Jonah':4,'Micah':7,'Nahum':3,'Habakkuk':3,'Zephaniah':3,'Haggai':2,'Zechariah':14,'Malachi':4,
+      'Matthew':28,'Mark':16,'Luke':24,'John':21,'Acts':28,'Romans':16,'1 Corinthians':16,'2 Corinthians':13,'Galatians':6,'Ephesians':6,'Philippians':4,'Colossians':4,'1 Thessalonians':5,'2 Thessalonians':3,'1 Timothy':6,'2 Timothy':4,'Titus':3,'Philemon':1,'Hebrews':13,'James':5,'1 Peter':5,'2 Peter':3,'1 John':5,'2 John':1,'3 John':1,'Jude':1,'Revelation':22
+    };
+
+    // Sample verse database (expanded in real app)
+    const VERSE_DB = {
+      'John': {
+        3: [
+          {n:1, text:"Now there was a Pharisee, a man named Nicodemus who was a member of the Jewish ruling council.", redLetter:false},
+          {n:2, text:"He came to Jesus at night and said, 'Rabbi, we know that you are a teacher who has come from God. For no one could perform the signs you are doing if God were not with him.'", redLetter:false},
+          {n:3, text:"Jesus replied, 'Very truly I tell you, no one can see the kingdom of God unless they are born again.'", redLetter:true},
+          {n:16, text:"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.", redLetter:true},
+          {n:17, text:"For God did not send his Son into the world to condemn the world, but to save the world through him.", redLetter:true},
+          {n:18, text:"Whoever believes in him is not condemned, but whoever does not believe stands condemned already because they have not believed in the name of God's one and only Son.", redLetter:true}
+        ]
+      }
+    };
+
+    // State
+    let state = {
+      book: 'John',
+      chapter: 3,
+      translation: 'NIV',
+      selectedVerses: new Set(),
+      theme: 'light',
+      sidebarCollapsed: false,
+      sidePanelVisible: true,
+      offlineMode: !navigator.onLine,
+      fontSize: 16,
+      notes: JSON.parse(localStorage.getItem('bibleNotes') || '{}'),
+      highlights: JSON.parse(localStorage.getItem('bibleHighlights') || '{}')
+    };
+
+    // ==================== INITIALIZATION ====================
+    window.addEventListener('load', () => {
+      populateBooks();
+      loadChapter();
+      setupOfflineDetection();
+      registerServiceWorker();
+    });
+
+    function populateBooks() {
+      const bookSelect = document.getElementById('book-select');
+      bookSelect.innerHTML = '';
+      
+      const otGroup = document.createElement('optgroup');
+      otGroup.label = 'Old Testament';
+      BOOKS.OT.forEach(book => {
+        const option = document.createElement('option');
+        option.value = book;
+        option.textContent = book;
+        otGroup.appendChild(option);
+      });
+      
+      const ntGroup = document.createElement('optgroup');
+      ntGroup.label = 'New Testament';
+      BOOKS.NT.forEach(book => {
+        const option = document.createElement('option');
+        option.value = book;
+        option.textContent = book;
+        ntGroup.appendChild(option);
+      });
+      
+      bookSelect.appendChild(otGroup);
+      bookSelect.appendChild(ntGroup);
+      bookSelect.value = state.book;
+      
+      populateChapters();
+    }
+
+    function populateChapters() {
+      const chapterSelect = document.getElementById('chapter-select');
+      chapterSelect.innerHTML = '';
+      const count = CHAPTER_COUNTS[state.book] || 1;
+      for (let i = 1; i <= count; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = `Chapter ${i}`;
+        chapterSelect.appendChild(option);
+      }
+      chapterSelect.value = state.chapter;
+    }
+
+    function loadChapter() {
+      state.chapter = parseInt(document.getElementById('chapter-select').value);
+      document.getElementById('book-title').textContent = state.book;
+      document.getElementById('chapter-title').textContent = `Chapter ${state.chapter}`;
+      
+      const container = document.getElementById('verses-container');
+      const bookData = VERSE_DB[state.book];
+      
+      if (bookData && bookData[state.chapter]) {
+        const verses = bookData[state.chapter];
+        container.innerHTML = verses.map(v => `
+          <div class="verse-item ${state.selectedVerses.has(`${state.book}:${state.chapter}:${v.n}`) ? 'selected' : ''}" 
+               onclick="toggleVerseSelection('${state.book}:${state.chapter}:${v.n}', ${v.n}, this)">
+            <span class="verse-number">${v.n}</span>
+            <span class="verse-text ${v.redLetter ? 'red-letter' : ''}">${v.text}</span>
+          </div>
+        `).join('');
+      } else {
+        // Generate placeholder
+        container.innerHTML = Array(25).fill(0).map((_, i) => `
+          <div class="verse-item" onclick="toggleVerseSelection('${state.book}:${state.chapter}:${i+1}', ${i+1}, this)">
+            <span class="verse-number">${i+1}</span>
+            <span class="verse-text">In the beginning was the Word, and the Word was with God, and the Word was God.</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    // ==================== VERSE SELECTION ====================
+    function toggleVerseSelection(key, num, element) {
+      if (state.selectedVerses.has(key)) {
+        state.selectedVerses.delete(key);
+        element.classList.remove('selected');
+      } else {
+        state.selectedVerses.add(key);
+        element.classList.add('selected');
+      }
+      
+      const toolbar = document.getElementById('selection-toolbar');
+      if (state.selectedVerses.size > 0) {
+        toolbar.classList.add('show');
+      } else {
+        toolbar.classList.remove('show');
+      }
+    }
+
+    function clearSelection() {
+      state.selectedVerses.clear();
+      document.querySelectorAll('.verse-item.selected').forEach(el => {
+        el.classList.remove('selected');
+      });
+      document.getElementById('selection-toolbar').classList.remove('show');
+    }
+
+    function getSelectedVersesText() {
+      const verses = [];
+      state.selectedVerses.forEach(key => {
+        const [book, ch, verse] = key.split(':');
+        verses.push(`${book} ${ch}:${verse}`);
+      });
+      return verses.join(', ');
+    }
+
+    function copySelectedVerses() {
+      const text = getSelectedVersesText();
+      navigator.clipboard.writeText(text);
+      alert('Copied to clipboard!');
+    }
+
+    function shareSelectedVerses() {
+      const text = getSelectedVersesText();
+      if (navigator.share) {
+        navigator.share({
+          title: 'Bible Verses',
+          text: text
+        });
+      } else {
+        copySelectedVerses();
+      }
+    }
+
+    // ==================== COMMENTARY ====================
+    function getCommentaryForSelected() {
+      if (state.selectedVerses.size === 0) return;
+      const verses = getSelectedVersesText();
+      showSidePanel();
+      document.getElementById('panel-content').innerHTML = `
+        <div style="padding:1rem;">
+          <h4 style="margin-bottom:1rem;">Commentary on ${verses}</h4>
+          <div style="background:var(--bg-secondary);padding:1rem;border-radius:var(--radius);">
+            <p><strong>Matthew Henry:</strong> This passage reveals the great love of God toward sinners...</p>
+            <p style="margin-top:0.5rem;"><strong>Spurgeon:</strong> Here is the gospel in a nutshell...</p>
+            <p style="margin-top:0.5rem;"><strong>Calvin:</strong> The Evangelist sets forth the cause of salvation...</p>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==================== IMAGE CREATOR ====================
+    function openImageCreator() {
+      if (state.selectedVerses.size === 0) {
+        alert('Please select verses first');
+        return;
+      }
+      document.getElementById('image-modal').classList.add('show');
+      drawVersePreview();
+    }
+
+    function drawVersePreview() {
+      const canvas = document.getElementById('verse-canvas');
+      const ctx = canvas.getContext('2d');
+      
+      // Draw background
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(0, 0, 800, 400);
+      
+      // Draw gradient
+      const gradient = ctx.createLinearGradient(0, 0, 800, 400);
+      gradient.addColorStop(0, '#3b82f6');
+      gradient.addColorStop(1, '#8b5cf6');
+      ctx.fillStyle = gradient;
+      ctx.globalAlpha = 0.7;
+      ctx.fillRect(0, 0, 800, 400);
+      
+      // Draw text
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 24px Inter';
+      ctx.textAlign = 'center';
+      ctx.fillText('"For God so loved the world..."', 400, 200);
+      
+      ctx.font = '18px Inter';
+      ctx.fillText(getSelectedVersesText(), 400, 280);
+    }
+
+    function generateVerseImage() {
+      const prompt = document.getElementById('image-prompt').value;
+      // In real app, call AI image generation API
+      drawVersePreview(); // Update with new background
+    }
+
+    function downloadImage() {
+      const canvas = document.getElementById('verse-canvas');
+      const link = document.createElement('a');
+      link.download = 'bible-verse.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+
+    // ==================== AI TEACHER ====================
+    function askAI() {
+      const question = document.getElementById('ai-question').value;
+      const responseEl = document.getElementById('ai-response');
+      responseEl.innerHTML = '<div class="spinner"></div>';
+      
+      // Simulate AI response (in real app, call GPT API)
+      setTimeout(() => {
+        responseEl.innerHTML = `
+          <div style="background:var(--bg-secondary);padding:1rem;border-radius:var(--radius);">
+            <p><strong>AI Teacher:</strong> Great question about "${question}"!</p>
+            <p style="margin-top:0.5rem;">The Bible addresses this in several places. For example, in John 3:16 we see God's love demonstrated. Also Romans 8:28 assures us that all things work together for good for those who love God.</p>
+            <p style="margin-top:0.5rem;">Would you like me to explore specific passages or dive deeper into any aspect?</p>
+          </div>
+        `;
+      }, 1000);
+    }
+
+    // ==================== SERMON GENERATOR ====================
+    function generateSermon() {
+      const topic = document.getElementById('sermon-topic').value;
+      const style = document.getElementById('sermon-style').value;
+      const output = document.getElementById('sermon-output');
+      
+      output.innerHTML = '<div class="spinner"></div>';
+      
+      setTimeout(() => {
+        output.innerHTML = `
+          <div style="background:var(--bg-secondary);padding:1rem;border-radius:var(--radius);">
+            <h4 style="margin-bottom:0.5rem;">${style.charAt(0).toUpperCase() + style.slice(1)} Sermon: ${topic}</h4>
+            <p><strong>Title:</strong> The Transformative Power of Faith</p>
+            <p><strong>Text:</strong> Romans 12:1-2</p>
+            <p><strong>Introduction:</strong> In a world that constantly pressures us to conform...</p>
+            <p><strong>I. The Call to Surrender</strong><br>Paul urges us to present our bodies as living sacrifices...</p>
+            <p><strong>II. The Renewing of the Mind</strong><br>Transformation begins in our thinking...</p>
+            <p><strong>III. Discovering God's Will</strong><br>When our minds are renewed, we discern what is good...</p>
+            <p><strong>Conclusion:</strong> True worship is living out God's purposes daily...</p>
+          </div>
+        `;
+      }, 1500);
+    }
+
+    // ==================== DEVOTION GENERATOR ====================
+    function generateDevotion() {
+      const theme = document.getElementById('devotion-theme').value;
+      const output = document.getElementById('devotion-output');
+      
+      output.innerHTML = '<div class="spinner"></div>';
+      
+      setTimeout(() => {
+        output.innerHTML = `
+          <div style="background:var(--bg-secondary);padding:1rem;border-radius:var(--radius);">
+            <h4 style="margin-bottom:0.5rem;">Daily Devotion: ${theme}</h4>
+            <p><strong>Scripture:</strong> Psalm 23:1-6</p>
+            <p><strong>Reflection:</strong> The Lord is my shepherd - these words have brought comfort to millions. When we acknowledge God as our shepherd, we recognize our dependence on Him. He provides, guides, and protects. In a world of uncertainty, we have a shepherd who knows the way.</p>
+            <p><strong>Prayer:</strong> Lord, thank you for being my shepherd. Help me to trust your leading today, even when I cannot see the path ahead. Amen.</p>
+            <p><strong>Action Step:</strong> Take a moment to list three ways God has provided for you this week.</p>
+          </div>
+        `;
+      }, 1000);
+    }
+
+    // ==================== GREEK/HEBREW STUDY ====================
+    function showWordStudy(word) {
+      const studyData = {
+        'logos': {
+          greek: 'Λόγος',
+          translit: 'Logos',
+          meaning: 'Word, reason, divine expression',
+          usage: 'John 1:1, Revelation 19:13'
+        },
+        'agape': {
+          greek: 'ἀγάπη',
+          translit: 'Agape',
+          meaning: 'Unconditional love, divine love',
+          usage: 'John 3:16, 1 Corinthians 13'
+        }
+      };
+      
+      showSidePanel();
+      document.getElementById('panel-content').innerHTML = `
+        <div style="padding:1rem;">
+          <h4 style="margin-bottom:1rem;">Greek Word Study</h4>
+          <div style="background:var(--bg-secondary);padding:1rem;border-radius:var(--radius);">
+            <p><strong>Word:</strong> ${studyData[word]?.greek || 'Λόγος'}</p>
+            <p><strong>Transliteration:</strong> ${studyData[word]?.translit || 'Logos'}</p>
+            <p><strong>Meaning:</strong> ${studyData[word]?.meaning || 'Word, divine expression'}</p>
+            <p><strong>Key Verses:</strong> ${studyData[word]?.usage || 'John 1:1'}</p>
+            <p><strong>Strong's Number:</strong> G3056</p>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==================== NAVIGATION ====================
+    function changeBook() {
+      state.book = document.getElementById('book-select').value;
+      populateChapters();
+      loadChapter();
+    }
+
+    function prevChapter() {
+      if (state.chapter > 1) {
+        state.chapter--;
+      } else {
+        // Go to previous book
+        const allBooks = [...BOOKS.OT, ...BOOKS.NT];
+        const index = allBooks.indexOf(state.book);
+        if (index > 0) {
+          state.book = allBooks[index - 1];
+          state.chapter = CHAPTER_COUNTS[state.book] || 1;
+          document.getElementById('book-select').value = state.book;
+        }
+      }
+      document.getElementById('chapter-select').value = state.chapter;
+      loadChapter();
+    }
+
+    function nextChapter() {
+      const maxChapters = CHAPTER_COUNTS[state.book] || 1;
+      if (state.chapter < maxChapters) {
+        state.chapter++;
+      } else {
+        // Go to next book
+        const allBooks = [...BOOKS.OT, ...BOOKS.NT];
+        const index = allBooks.indexOf(state.book);
+        if (index < allBooks.length - 1) {
+          state.book = allBooks[index + 1];
+          state.chapter = 1;
+          document.getElementById('book-select').value = state.book;
+        }
+      }
+      document.getElementById('chapter-select').value = state.chapter;
+      loadChapter();
+    }
+
+    function performSearch() {
+      const query = document.getElementById('search-input').value;
+      openModal('ai');
+      document.getElementById('ai-question').value = query;
+      askAI();
+    }
+
+    function handleSearchKey(e) {
+      if (e.key === 'Enter') {
+        performSearch();
+      }
+    }
+
+    // ==================== UI CONTROLS ====================
+    function setActiveNav(element, view) {
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      element.classList.add('active');
+      
+      switch(view) {
+        case 'ai-teacher':
+          openModal('ai');
+          break;
+        case 'sermon':
+          openModal('sermon');
+          break;
+        case 'devotion':
+          openModal('devotion');
+          break;
+        case 'image-creator':
+          openImageCreator();
+          break;
+        case 'maps':
+          openModal('maps');
+          break;
+        case 'timeline':
+          openModal('timeline');
+          break;
+        case 'study':
+          showWordStudy('logos');
+          break;
+      }
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('collapsed');
+    }
+
+    function toggleSidePanel() {
+      const panel = document.getElementById('side-panel');
+      panel.classList.toggle('hidden');
+      state.sidePanelVisible = !panel.classList.contains('hidden');
+    }
+
+    function showSidePanel() {
+      document.getElementById('side-panel').classList.remove('hidden');
+    }
+
+    function switchPanelTab(tab) {
+      document.querySelectorAll('.panel-tab').forEach(el => el.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      const content = document.getElementById('panel-content');
+      switch(tab) {
+        case 'commentary':
+          content.innerHTML = '<div style="padding:1rem;">Select a verse to see commentary</div>';
+          break;
+        case 'crossref':
+          content.innerHTML = '<div style="padding:1rem;">Cross-references will appear here</div>';
+          break;
+        case 'study':
+          showWordStudy('logos');
+          break;
+        case 'notes':
+          content.innerHTML = '<div style="padding:1rem;"><textarea style="width:100%;height:200px;padding:0.5rem;" placeholder="Write your notes..."></textarea><button class="nav-btn" style="margin-top:0.5rem;">Save Notes</button></div>';
+          break;
+      }
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      state.theme = document.body.classList.contains('dark') ? 'dark' : 'light';
+    }
+
+    function openModal(modalId) {
+      document.getElementById(`${modalId}-modal`).classList.add('show');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(`${modalId}-modal`).classList.remove('show');
+    }
+
+    function changeMap() {
+      // Change map SVG based on selection
+      alert('Map view changed');
+    }
+
+    // ==================== OFFLINE SUPPORT ====================
+    function setupOfflineDetection() {
+      window.addEventListener('online', updateOnlineStatus);
+      window.addEventListener('offline', updateOnlineStatus);
+      updateOnlineStatus();
+    }
+
+    function updateOnlineStatus() {
+      const offlineBadge = document.getElementById('offline-badge');
+      if (navigator.onLine) {
+        offlineBadge.classList.remove('show');
+        state.offlineMode = false;
+      } else {
+        offlineBadge.classList.add('show');
+        state.offlineMode = true;
+      }
+    }
+
+    function registerServiceWorker() {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(err => {
+          console.log('Service worker registration failed');
+        });
+      }
+    }
+
+    // ==================== PWA INSTALL ====================
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      
+      // Show install button
+      const installBtn = document.createElement('button');
+      installBtn.className = 'nav-btn';
+      installBtn.innerHTML = '<i class="fas fa-download"></i> Install App';
+      installBtn.style.position = 'fixed';
+      installBtn.style.bottom = '1rem';
+      installBtn.style.right = '1rem';
+      installBtn.style.zIndex = '1000';
+      installBtn.onclick = () => {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted install');
+          }
+          deferredPrompt = null;
+        });
+      };
+      document.body.appendChild(installBtn);
+    });
+  </script>
+</body>
+</html>
